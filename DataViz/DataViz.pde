@@ -14,7 +14,7 @@ List<ClusteredMarker> clustered1;
 List<ClusteredMarker> clustered2;
 
 // Zet deze waarden van 1-3 om verschillende typen maps te krijgen
-int mapMethod = 3;
+int mapMethod = 1;
 
 // Zet deze waarden van 1-3 om verschillende kleurensets te gebruiken
 int visColors = 1;
@@ -22,8 +22,11 @@ int visColors = 1;
 // Zet deze waarde op true om clustering toe te passen
 Boolean applyClustering = true;
 
+// Alpha waarde, zet op 0 voor onzichtbaar, 255 voor totaal niet transparant
+int alpha = 200;
+
 public void setup() {
-  size(800, 600, P2D);
+  size(1024, 768, P2D);
   noStroke();
   
   locations1 = new ArrayList<Location>();
@@ -171,7 +174,7 @@ public void draw() {
     for (ClusteredMarker cluster: clustered1)
     {
       ScreenPosition position = map.getScreenPosition(cluster.getLoc());
-      fill(0, 200, 0, 100);
+      fill(0, 200, 0, alpha);
       float s = map.getZoom() / 5000;
       ellipse(position.x, position.y, 5 + (cluster.getSize() * s), 5 + (cluster.getSize() * s));
     }
@@ -179,7 +182,7 @@ public void draw() {
     for (ClusteredMarker cluster: clustered2)
     {
       ScreenPosition position = map.getScreenPosition(cluster.getLoc());
-      fill(200, 0, 0, 100);
+      fill(200, 0, 0, alpha);
       float s = map.getZoom() / 5000;
       ellipse(position.x, position.y, 5 + (cluster.getSize() * s), 5 + (cluster.getSize() * s));
     }
@@ -190,7 +193,7 @@ public void draw() {
     for (Location loc: locations1)
     {
       ScreenPosition posBerlin = map.getScreenPosition(loc);
-      fill(0, 200, 0, 100);
+      fill(0, 200, 0, alpha);
       float s = map.getZoom();
       //ellipse(posBerlin.x, posBerlin.y, s / 1000, s / 1000);
       ellipse(posBerlin.x, posBerlin.y, 10, 10);
@@ -199,7 +202,7 @@ public void draw() {
     for (Location loc: locations2)
     {
       ScreenPosition posBerlin = map.getScreenPosition(loc);
-      fill(200, 0, 0, 100);
+      fill(200, 0, 0, alpha);
       ellipse(posBerlin.x, posBerlin.y, 10, 10);
     }
   }
