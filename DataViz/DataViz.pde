@@ -14,7 +14,7 @@ List<ClusteredMarker> clustered1;
 List<ClusteredMarker> clustered2;
 
 // Zet deze waarden van 1-3 om verschillende typen maps te krijgen
-int mapMethod = 1;
+int mapMethod = 2;
 
 // Zet deze waarden van 1-3 om verschillende kleurensets te gebruiken
 int visColors = 1;
@@ -121,7 +121,7 @@ public List<ClusteredMarker> ClusterLocations(List<Location> source)
 
 public void fillRandomData()
 {
-  for (int i = 0; i<12550; i++)
+  for (int i = 0; i<5000; i++)
   {
       Random rand = new Random();
       float xdev = rand.nextInt(500) - 250;
@@ -131,7 +131,7 @@ public void fillRandomData()
       locations1.add(pseudoplek);
   }
   
-  for (int i = 0; i<7055; i++)
+  for (int i = 0; i<3000; i++)
   {
       Random rand = new Random();
       float xdev = rand.nextInt(500) - 250;
@@ -174,16 +174,33 @@ public void draw() {
     for (ClusteredMarker cluster: clustered1)
     {
       ScreenPosition position = map.getScreenPosition(cluster.getLoc());
-      fill(0, 200, 0, alpha);
-      float s = map.getZoom() / 5000;
+      if (visColors==1)
+      {      
+        fill(0, 200, 0, alpha);
+      }
+      if (visColors==2)
+      {      
+        fill(0, 200, 0, alpha);
+      }
+      
+      float s = map.getZoom() / 1000;
       ellipse(position.x, position.y, 5 + (cluster.getSize() * s), 5 + (cluster.getSize() * s));
     }
     
     for (ClusteredMarker cluster: clustered2)
     {
       ScreenPosition position = map.getScreenPosition(cluster.getLoc());
-      fill(200, 0, 0, alpha);
-      float s = map.getZoom() / 5000;
+
+      if (visColors==1)
+      {      
+        fill(200, 0, 0, alpha);
+      }
+      if (visColors==2)
+      {      
+        fill(0, 0, 200, alpha);
+      }      
+      
+      float s = map.getZoom() / 1000;
       ellipse(position.x, position.y, 5 + (cluster.getSize() * s), 5 + (cluster.getSize() * s));
     }
   }
