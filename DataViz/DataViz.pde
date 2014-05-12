@@ -17,10 +17,10 @@ List<ClusteredMarker> clustered2;
 int mapMethod = 2;
 
 // Zet deze waarden van 1-3 om verschillende kleurensets te gebruiken
-int visColors = 1;
+int visColors = 3;
 
 // Zet deze waarde op true om clustering toe te passen
-Boolean applyClustering = true;
+Boolean applyClustering = false;
 
 // Alpha waarde, zet op 0 voor onzichtbaar, 255 voor totaal niet transparant
 int alpha = 200;
@@ -121,7 +121,7 @@ public List<ClusteredMarker> ClusterLocations(List<Location> source)
 
 public void fillRandomData()
 {
-  for (int i = 0; i<5000; i++)
+  for (int i = 0; i<2000; i++)
   {
       Random rand = new Random();
       float xdev = rand.nextInt(500) - 250;
@@ -131,7 +131,7 @@ public void fillRandomData()
       locations1.add(pseudoplek);
   }
   
-  for (int i = 0; i<3000; i++)
+  for (int i = 0; i<600; i++)
   {
       Random rand = new Random();
       float xdev = rand.nextInt(500) - 250;
@@ -182,6 +182,10 @@ public void draw() {
       {      
         fill(0, 200, 0, alpha);
       }
+      if (visColors==3)
+      {      
+        fill(200, 0, 0, alpha);
+      }
       
       float s = map.getZoom() / 1000;
       ellipse(position.x, position.y, 5 + (cluster.getSize() * s), 5 + (cluster.getSize() * s));
@@ -198,7 +202,11 @@ public void draw() {
       if (visColors==2)
       {      
         fill(0, 0, 200, alpha);
-      }      
+      }
+      if (visColors==3)
+      {      
+        fill(200, 100, 0, alpha);
+      }
       
       float s = map.getZoom() / 1000;
       ellipse(position.x, position.y, 5 + (cluster.getSize() * s), 5 + (cluster.getSize() * s));
@@ -210,7 +218,18 @@ public void draw() {
     for (Location loc: locations1)
     {
       ScreenPosition posBerlin = map.getScreenPosition(loc);
-      fill(0, 200, 0, alpha);
+      if (visColors==1)
+      {      
+        fill(0, 200, 0, alpha);
+      }
+      if (visColors==2)
+      {      
+        fill(0, 200, 0, alpha);
+      }
+      if (visColors==3)
+      {      
+        fill(200, 0, 0, alpha);
+      }
       float s = map.getZoom();
       //ellipse(posBerlin.x, posBerlin.y, s / 1000, s / 1000);
       ellipse(posBerlin.x, posBerlin.y, 10, 10);
@@ -219,7 +238,18 @@ public void draw() {
     for (Location loc: locations2)
     {
       ScreenPosition posBerlin = map.getScreenPosition(loc);
-      fill(200, 0, 0, alpha);
+      if (visColors==1)
+      {      
+        fill(200, 0, 0, alpha);
+      }
+      if (visColors==2)
+      {      
+        fill(0, 0, 200, alpha);
+      }
+      if (visColors==3)
+      {      
+        fill(200, 100, 0, alpha);
+      }
       ellipse(posBerlin.x, posBerlin.y, 10, 10);
     }
   }
