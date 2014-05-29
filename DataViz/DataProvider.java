@@ -14,6 +14,54 @@ public class DataProvider  {
 		this.datasets.add(set);
 	}
 
+        public void toggleDataSetSelected(int index)
+        {
+          System.out.println("toggle dataset id: " + index);
+          // Itereer door dataste/category/subcategory
+          for (DataSet set: this.datasets)
+          {
+            if (set.id == index)
+            {
+              // toggle alles hieronder
+              for (Category cat: set.categories)
+              {
+                for (SubCategory scat: cat.subcategories)
+                {
+                  scat.selected = !scat.selected;
+                  System.out.println("new : " + scat.id + "  VAL:" + scat.selected);
+                }
+              }
+            }
+            else
+            {
+              // Ga dieper kijken
+              for (Category cat: set.categories)
+              {
+                if (cat.id == index)
+                {
+                  for (SubCategory scat: cat.subcategories)
+                  {
+                    scat.selected = !scat.selected;
+                    System.out.println("new : " + scat.id + "  VAL:" + scat.selected);
+                  }
+                }
+                else
+                {
+                  // Dieper
+                  for (SubCategory scat: cat.subcategories)
+                  {
+                    if (scat.id == index)
+                    {
+                      scat.selected = !scat.selected;
+                      System.out.println("new : " + scat.id + "  VAL:" + scat.selected);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
         public int getMaxJaar()
         {
           int jaar = 0;

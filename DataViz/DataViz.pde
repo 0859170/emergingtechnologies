@@ -33,6 +33,8 @@ int intervalInMilliseconds = 1000;
 boolean isPlaying = false;
 
 int lastUpdate = millis();
+int toggleDebounceLatest = millis();
+int toggleDebounceMilliseconds = 200;
 
 List<SubCategory> currentSet;
 
@@ -152,16 +154,30 @@ public void setup() {
 }
 
 public void controlEvent(ControlEvent theEvent) {
-  println(theEvent.value());  
-  
-  // Als iemand een andere maand selecteert in de slider dan moeten we terugrekenen naar jaar / maand
-  // het integer component is het jaar
-  int currentJaar = int(theEvent.value());
-  int currentMaand = int((theEvent.value() - currentJaar) * 100);
-  println(currentJaar);
-  println(currentMaand);
-  
-  currentSet = provider.getDataForMoment(currentJaar, currentMaand);
+  if (theEvent.getController().getName() == "time")
+  {
+    println(theEvent.value());  
+    
+    // Als iemand een andere maand selecteert in de slider dan moeten we terugrekenen naar jaar / maand
+    // het integer component is het jaar
+    int currentJaar = int(theEvent.value());
+    int currentMaand = int((theEvent.value() - currentJaar) * 100);
+    println(currentJaar);
+    println(currentMaand);
+    
+    currentSet = provider.getDataForMoment(currentJaar, currentMaand);
+  }
+  else
+  {
+    println("NON TIME VAL: " + theEvent.value());
+    // We gaan uit van een togglebutton
+    if ((millis() - toggleDebounceLatest) > toggleDebounceMilliseconds)
+    {
+      provider.toggleDataSetSelected(int(theEvent.value()));
+      currentSet = provider.getDataForMoment(currentJaar, currentMaand);
+      toggleDebounceLatest = millis();
+    }
+  }
     
     
   // uncomment the line below to remove a multilist item when clicked.
