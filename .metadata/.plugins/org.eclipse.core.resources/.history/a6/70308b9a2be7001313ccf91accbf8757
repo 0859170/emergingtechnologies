@@ -1,0 +1,12 @@
+<?php
+class FietsendiefstalConvert {
+	
+	private $csv_data;
+	
+	public function __construct($data) {
+		$csv_data = @file_get_contents('../data/fietsendiefstal.csv');
+		var_dump($csv_data);
+		//echo $csv_data;
+	}
+}
+?>

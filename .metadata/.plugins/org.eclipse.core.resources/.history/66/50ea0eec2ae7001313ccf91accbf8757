@@ -1,0 +1,16 @@
+<?php
+$data = array();
+
+if ($handle = opendir('./convert/')) {
+	
+	while (false !== ($entry = readdir($handle))) {
+		if (stripos($entry,".convert.php")) {
+			require_once('./convert/'.$entry);
+			$classname = ucfirst(substr($entry,0,stripos($entry,".")))."Convert";
+			echo $classname;
+		}
+	}
+	
+	closedir($handle);
+}
+?>

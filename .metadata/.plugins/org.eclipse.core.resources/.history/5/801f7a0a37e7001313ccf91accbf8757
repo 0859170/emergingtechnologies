@@ -1,0 +1,12 @@
+public class DataPoint  {
+	public float lat;
+	public float lng;
+	public float amount;
+	
+	public DataPoint(double lat, double lng, float amount)
+	{
+		this.lat = lat;
+		this.lng = lng;
+		this.amount = amount;
+	}
+}

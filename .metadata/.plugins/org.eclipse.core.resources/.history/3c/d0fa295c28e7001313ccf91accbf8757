@@ -1,0 +1,10 @@
+<?php
+if ($handle = opendir('./')) {
+	echo "Directory handle: $handle\n";
+	echo "Entries:\n";
+	
+	while (false !== ($entry = readdir($handle))) {
+		echo "$entry\n";
+	}
+}
+?>

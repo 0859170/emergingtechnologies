@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>.org.eclipse.dltk.core.external.folders</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>.link1</name>
+			<type>2</type>
+			<location>/Users/Mark/Documents/workspaces/HRO/INFPR201A2/.metadata/.plugins/org.eclipse.php.core/__language__/76c04f69</location>
+		</link>
+	</linkedResources>
+</projectDescription>

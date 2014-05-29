@@ -10,7 +10,7 @@ public class Convert {
 	public static void main(String[] args) {
 		DataSet data = new DataSet("Misdaad");
 		Category cat = new Category("Diefstal");
-		SubCategory subcat = new SubCategory("Fietsen",1,1);
+		SubCategory subcat = new SubCategory("Fietsen",0,1);
 		
 		BufferedReader fileReader = null;
 		int i;
@@ -82,8 +82,7 @@ public class Convert {
 		cat.addSubCategory(subcat);
 		data.addCategory(cat);
 		
-		URLReader response = new URLReader();
-		System.out.println(response.readUrl());
+		
 	}
 
 }

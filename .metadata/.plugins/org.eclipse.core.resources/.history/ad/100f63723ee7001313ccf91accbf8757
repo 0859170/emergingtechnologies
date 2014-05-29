@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class GeoCoder {
+
+	public GeoCoder() {
+		BufferedReader fileReader = null;
+		int i;
+		String line = "";
+		String fileToParse = "../postcode_NL.csv";
+		
+		try {
+			fileReader = new BufferedReader(new FileReader(fileToParse));
+			while ((line = fileReader.readLine()) != null) {
+				i = 0;
+				String[] tokens = line.split(",");
+				
+				for (String token : tokens) {
+					if (token.startsWith("\"")) {
+						token = token.substring(1);
+					}
+					if (token.endsWith("\"")) {
+						token = token.substring(0, token.length() - 1);
+					}
+					
+					System.out.println(token);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void GeoCodeAddress(String straatnaam, String plaats) {
+		
+		
+	}
+	
+	public static void GeoCodeZipcode(String zipcode) {
+		
+		
+	}
+
+}

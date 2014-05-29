@@ -1,0 +1,14 @@
+<?php
+$data = array();
+
+if ($handle = opendir('./data')) {
+	
+	while (false !== ($entry = readdir($handle))) {
+		if (stripos($entry, '.csv')) {
+			$data[] = $entry;
+		}
+	}
+	
+	closedir($handle);
+}
+?>

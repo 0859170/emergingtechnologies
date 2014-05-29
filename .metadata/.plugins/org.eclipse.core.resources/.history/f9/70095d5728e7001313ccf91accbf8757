@@ -1,0 +1,8 @@
+<?php
+if ($handle = opendir('./')) {
+	echo "Directory handle: $handle\n";
+	echo "Entries:\n";
+	
+	
+}
+?>

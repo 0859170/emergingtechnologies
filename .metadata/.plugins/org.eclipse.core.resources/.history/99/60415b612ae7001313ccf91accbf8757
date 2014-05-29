@@ -1,0 +1,15 @@
+<?php
+$data = array();
+
+if ($handle = opendir('./data')) {
+	
+	while (false !== ($entry = readdir($handle))) {
+		var_dump($entry,".convert.php");
+		if (stripos($entry,".convert.php")) {
+			require_once('./data/'.$entry);
+		}
+	}
+	
+	closedir($handle);
+}
+?>

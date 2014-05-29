@@ -1,0 +1,11 @@
+
+public class Location {
+	
+	public String zipcode;
+	public String straatnaam;
+	public String plaatsnaam;
+
+	public Location() {
+	}
+
+}
