@@ -25,6 +25,15 @@ int minMaand = 0;
 int maxJaar = 0;
 int maxMaand = 0;
 
+int currentJaar = 0;
+int currentMaand = 0;
+
+int intervalInMilliseconds = 1000;
+
+boolean isPlaying = false;
+
+int lastUpdate = millis();
+
 List<SubCategory> currentSet;
 
 java.io.FilenameFilter jsonFilter = new java.io.FilenameFilter() {
@@ -67,7 +76,10 @@ public void setup() {
   println("maxJaar : " + maxJaar);
   println("maxMaand: " + maxMaand);
   
-  currentSet = provider.getDataForMoment(minJaar, minMaand);
+  currentJaar = minJaar;
+  currentMaand = minMaand;
+  
+  currentSet = provider.getDataForMoment(currentJaar, currentMaand);
   
   //GUI control
   controlP5 = new ControlP5(this);
@@ -112,18 +124,35 @@ public void setup() {
   controlP5.addSlider("time")
      .setPosition(100,height - 20)
      .setWidth(width - 200)
-     .setRange(minJaar + (minMaand / 100), maxJaar + (maxMaand / 100)) // values can range from big to small as well
-     .setValue(minJaar + (minMaand / 100))
-     .setNumberOfTickMarks(2 + months)
+     .setRange(float(minJaar) + (float(minMaand) / 100), float(maxJaar) + (float(maxMaand) / 100)) // values can range from big to small as well
+     .setValue(float(minJaar) + (float(minMaand) / 100))
+     .setNumberOfTickMarks(1 + months)
+     //.setNumberOfTickMarks(80)
      .setSliderMode(Slider.FLEXIBLE)
      .setLabel("Tijd")
      ;
+     
+  PImage[] imgs = {loadImage("button_a.png"),loadImage("button_b.png"),loadImage("button_c.png")};
+  controlP5.addButton("play")
+     .setValue(1)
+     .setPosition(20,height - 20)
+     .setImages(imgs)
+     .updateSize()
+     ;
+  
+  // Wordt automatisch aangezet?   
+  isPlaying = false;
 }
 
 public void controlEvent(ControlEvent theEvent) {
   println(theEvent.value());  
   // uncomment the line below to remove a multilist item when clicked.
   // theEvent.controller().remove();
+}
+
+public void play(int theValue) {
+  println("playbutton aangeroepen: "+theValue);
+  isPlaying = true;
 }
 
 public void drawLegend()
@@ -154,8 +183,51 @@ public void draw() {
   background(time);
   map.draw();
   
-  // Alleen bij tijdsverandering of bij wisselen selected?
-  currentSet = provider.getDataForMoment(minJaar, minMaand);
+  int elapsed = millis() - lastUpdate;
+  
+  if ((elapsed > intervalInMilliseconds) && isPlaying)
+  {
+    println("update want: " + elapsed);
+    
+    println(currentJaar);
+    println(currentMaand);
+    lastUpdate = millis();
+    if (currentMaand == 12)
+    {
+      currentMaand = 1;
+      currentJaar++;
+    }
+    else
+    {
+      currentMaand++;
+    }
+    
+    if (currentJaar > maxJaar)
+    {
+      currentJaar = minJaar;
+      currentMaand = minMaand;
+    }
+    else
+    {
+      if (currentJaar == maxJaar && currentMaand > maxMaand)
+      {
+        currentJaar = minJaar;
+        currentMaand = minMaand;
+      }
+    }
+    
+    println("na update");
+    println(currentJaar);
+    println(currentMaand);
+    
+    float newval = float(currentJaar) + (float(currentMaand) / 100);
+    
+    println("calced " + newval);
+    // We zetten de slider op de huidige jaar/maand combo
+    controlP5.getController("time").setValue(newval);
+    // Alleen bij tijdsverandering of bij wisselen selected?
+    currentSet = provider.getDataForMoment(currentJaar, currentMaand);
+  }
   
   drawLegend();
   

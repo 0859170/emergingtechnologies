@@ -31,16 +31,48 @@
 															"locations":	[
 																			{
 																			"lat": 51.2,
-																			"lng": 4,
+																			"lng": 4.5,
 																			"amount": 90
 																			},
 																			{
 																			"lat": 51.2,
-																			"lng": 4.1,
+																			"lng": 3.2,
 																			"amount": 30
 																			}
 																			]	
-														}
+														},
+														{
+															"jaar": 2010,
+															"maand": 3,
+															"locations":	[
+																			{
+																			"lat": 51.2,
+																			"lng": 4.2,
+																			"amount": 90
+																			},
+																			{
+																			"lat": 51.2,
+																			"lng": 4.2,
+																			"amount": 30
+																			}
+																			]	
+														},
+														{
+															"jaar": 2010,
+															"maand": 4,
+															"locations":	[
+																			{
+																			"lat": 51.2,
+																			"lng": 4.1,
+																			"amount": 90
+																			},
+																			{
+																			"lat": 51.2,
+																			"lng": 4.3,
+																			"amount": 30
+																			}
+																			]	
+														}														
 														]	
 										}
 										]
