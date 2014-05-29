@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.net.*;
 import java.io.*;
 
+import org.codehaus.jackson.*;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
 public class Convert {
 
 	public static void main(String[] args) {
@@ -18,6 +22,8 @@ public class Convert {
 		String fileToParse = "/Users/Mark/Documents/workspaces/HRO/INFPR201A2/fietsendiefstal.csv";
 		boolean initial = true;
 		ArrayList<String> header = new ArrayList<String>();
+		
+		GeoCoder geo = new GeoCoder();
 
 		try {
 			fileReader = new BufferedReader(new FileReader(fileToParse));
@@ -73,7 +79,11 @@ public class Convert {
 
 				}
 				
-				subcat.addLocation(beginJaar,beginMaand,new DataPoint(51.9197405f,4.487553f,1));
+				Location loc = geo.GeoCodeAddress(straat, plaats);
+				
+				if (loc.straatnaam != null) {
+					subcat.addLocation(beginJaar,beginMaand,new DataPoint(loc.lat,loc.lng,1));
+				}
 			}
 
 		} catch (IOException e) {
@@ -82,7 +92,16 @@ public class Convert {
 		cat.addSubCategory(subcat);
 		data.addCategory(cat);
 		
-		
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			mapper.writeValue(new File("/Users/Mark/Documents/workspaces/HRO/INFPR201A2/DataViz/data/export.json"), data);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

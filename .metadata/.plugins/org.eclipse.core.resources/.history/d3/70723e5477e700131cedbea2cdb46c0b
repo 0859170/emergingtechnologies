@@ -1,0 +1,74 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class GeoCoder {
+	
+	private Map<String, Map> addresses;
+
+	public GeoCoder() {
+		//two lists, one with zipcode and one with city/street
+		this.addresses = new HashMap<String, Map>(); 
+		
+		//read zipcode geolocation file
+		BufferedReader fileReader = null;
+		String line = "";
+		String fileToParse = "/Users/Mark/Documents/workspaces/HRO/INFPR201A2/postcode_NL.csv";
+		try {
+			fileReader = new BufferedReader(new FileReader(fileToParse));
+			while ((line = fileReader.readLine()) != null) {
+				
+				int i = 0;
+				String zipcode;
+				String street = "";
+				String city = "";
+				Map<String, Float> geoMap = new HashMap<String, Float>();
+				
+				String[] tokens = line.split(";");
+				for (String token : tokens) {
+					if (token.startsWith("\"")) {
+						token = token.substring(1);
+					}
+					if (token.endsWith("\"")) {
+						token = token.substring(0, token.length() - 1);
+					}
+					
+					switch(i) {
+					case 1:
+						zipcode = token;
+						break;
+					case 8:
+						street = token.toUpperCase();
+						break;
+					case 9:
+						city = token.toUpperCase();
+						break;
+					case 15:
+						geoMap.put("lat", Float.parseFloat(token));
+						break;
+					case 16:
+						geoMap.put("lng", Float.parseFloat(token));
+						break;
+					}
+					i++;
+				}
+				
+				Map<String, Map> streetMap = new HashMap<String, Map>();
+				streetMap.put(street, geoMap);
+				this.addresses.put(city, streetMap);
+				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void GeoCodeAddress(String straatnaam, String plaats) {
+		System.out.println(this.addresses);
+	}
+
+}

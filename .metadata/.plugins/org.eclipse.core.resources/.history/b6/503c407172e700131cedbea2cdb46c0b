@@ -1,0 +1,19 @@
+import java.io.BufferedReader;
+import java.util.ArrayList;
+
+
+public class GeoCoder {
+
+	public GeoCoder() {
+		BufferedReader fileReader = null;
+		int i;
+		String line = "";
+		String fileToParse = "/Users/Mark/Documents/workspaces/HRO/INFPR201A2/fietsendiefstal.csv";
+		ArrayList<String> header = new ArrayList<String>();
+	}
+	
+	public static void GeoCodeAddress(String straatnaam, String plaats) {
+		
+	}
+
+}

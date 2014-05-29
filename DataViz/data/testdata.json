@@ -1,11 +1,11 @@
 {
-	"naam": "misdaad",
+	"naam": "Verkeer",
 	"categories": 	[
 					{
-					"naam": "verkeer",
+					"naam": "Ongevallen",
 					"subcategories": 	[
 										{
-										  "naam": "ongevallen",
+										  "naam": "Ernstig",
 										  "datatype": 0,
 										  "weight": 1,
 										  "periods": 	[
