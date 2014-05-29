@@ -74,7 +74,7 @@ public void setup() {
   controlP5.addSlider("time")
      .setPosition(112,740)
      .setWidth(800)
-     .setRange(255,0) // values can range from big to small as well
+     .setRange(2011.0000,2014.9999) // values can range from big to small as well
      .setValue(128)
      .setNumberOfTickMarks(80)
      .setSliderMode(Slider.FLEXIBLE)
