@@ -74,6 +74,77 @@
 																			]	
 														}														
 														]	
+										},
+										{
+										  "naam": "inbraak",
+										  "datatype": 0,
+										  "weight": 1,
+										  "periods": 	[
+														{
+															"jaar": 2010,
+															"maand": 1,
+															"locations": [
+																		{
+																		"lat": 51.2,
+																		"lng": 4.1,
+																		"amount": 100
+																		},
+																		{
+																		"lat": 51.3,
+																		"lng": 4.01,
+																		"amount": 10
+																		}
+																		 ]	
+														},
+														{
+															"jaar": 2010,
+															"maand": 2,
+															"locations":	[
+																			{
+																			"lat": 51.2,
+																			"lng": 4.2,
+																			"amount": 90
+																			},
+																			{
+																			"lat": 51.2,
+																			"lng": 3.1,
+																			"amount": 30
+																			}
+																			]	
+														},
+														{
+															"jaar": 2010,
+															"maand": 3,
+															"locations":	[
+																			{
+																			"lat": 51.2,
+																			"lng": 4.3,
+																			"amount": 90
+																			},
+																			{
+																			"lat": 51.2,
+																			"lng": 4.02,
+																			"amount": 30
+																			}
+																			]	
+														},
+														{
+															"jaar": 2010,
+															"maand": 4,
+															"locations":	[
+																			{
+																			"lat": 51.2,
+																			"lng": 4.21,
+																			"amount": 90
+																			},
+																			{
+																			"lat": 51.2,
+																			"lng": 4.13,
+																			"amount": 30
+																			}
+																			]	
+														}														
+														]	
 										}
 										]
 					}

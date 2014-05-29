@@ -178,10 +178,6 @@ public void controlEvent(ControlEvent theEvent) {
       toggleDebounceLatest = millis();
     }
   }
-    
-    
-  // uncomment the line below to remove a multilist item when clicked.
-  // theEvent.controller().remove();
 }
 
 public void play(int theValue) {
