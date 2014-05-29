@@ -21,7 +21,7 @@ public class SubCategory  {
 		
 		for (Period per: this.periods)
 		{
-			if (per.jaar == jaar && per.maand == maand)
+			if (per.year == jaar && per.month == maand)
 			{
 				found =true;
 				per.addLocation(location);

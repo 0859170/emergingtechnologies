@@ -2,14 +2,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Period  {
-	public int jaar;
-	public int maand;
+	public int year;
+	public int month;
 	public List<DataPoint> locations;
 	
 	public Period(int year, int month)
 	{
-		this.jaar = year;
-		this.maand = month;
+		this.year = year;
+		this.month = month;
 		this.locations = new ArrayList<DataPoint>();
 	}
 	
