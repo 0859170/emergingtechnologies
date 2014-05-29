@@ -135,7 +135,7 @@ public void setup() {
      
   PImage[] imgs = {loadImage("button_a.png"),loadImage("button_b.png"),loadImage("button_c.png")};
   controlP5.addButton("play")
-     .setValue(1)
+     .setValue(-1)
      .setPosition(20,height - 20)
      .setImages(imgs)
      .updateSize()
@@ -143,7 +143,7 @@ public void setup() {
      
   PImage[] imgs2 = {loadImage("pauze_a.png"),loadImage("pauze_b.png"),loadImage("pauze_c.png")};
   controlP5.addButton("pauze")
-     .setValue(1)
+     .setValue(-1)
      .setPosition(40,height - 20)
      .setImages(imgs2)
      .updateSize()
@@ -170,12 +170,15 @@ public void controlEvent(ControlEvent theEvent) {
   else
   {
     println("NON TIME VAL: " + theEvent.value());
-    // We gaan uit van een togglebutton
-    if ((millis() - toggleDebounceLatest) > toggleDebounceMilliseconds)
+    if (theEvent.value() > -1)
     {
-      provider.toggleDataSetSelected(int(theEvent.value()));
-      currentSet = provider.getDataForMoment(currentJaar, currentMaand);
-      toggleDebounceLatest = millis();
+      // We gaan uit van een togglebutton
+      if ((millis() - toggleDebounceLatest) > toggleDebounceMilliseconds)
+      {
+        provider.toggleDataSetSelected(int(theEvent.value()));
+        currentSet = provider.getDataForMoment(currentJaar, currentMaand);
+        toggleDebounceLatest = millis();
+      }
     }
   }
 }
