@@ -1,0 +1,49 @@
+{
+	"naam": "misdaad",
+	"categories": 	[
+					{
+					"naam": "verkeer",
+					"subcategories": 	[
+										{
+										  "naam": "ongevallen",
+										  "datatype": 0,
+										  "weight": 1,
+										  "periods": 	[
+														{
+															"jaar": 2010,
+															"maand": 1,
+															"locations": [
+																		{
+																		"lat": 51.2,
+																		"lng": 4,
+																		"amount": 100
+																		},
+																		{
+																		"lat": 51.2,
+																		"lng": 4.1,
+																		"amount": 10
+																		}
+																		 ]	
+														},
+														{
+															"jaar": 2010,
+															"maand": 2,
+															"locations":	[
+																			{
+																			"lat": 51.2,
+																			"lng": 4,
+																			"amount": 90
+																			},
+																			{
+																			"lat": 51.2,
+																			"lng": 4.1,
+																			"amount": 30
+																			}
+																			]	
+														}
+														]	
+										}
+										]
+					}
+					]
+}

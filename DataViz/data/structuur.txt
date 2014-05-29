@@ -1,0 +1,20 @@
+
+dataprovider
+	+ GetDataSetsForMoment(int year, int month)
+	+ ToggleId(int id)
+	- Datasets
+		- id
+		- MinPeriod
+		- Maxperiod
+		- Categories
+			- id
+			- MinPeriod
+			- Maxperiod
+			- Subcategories
+				- id
+				- MinPeriod
+				- Maxperiod
+				- Selected
+				- Periods
+					- Locations
+					

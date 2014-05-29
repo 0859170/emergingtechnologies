@@ -2,81 +2,119 @@ import controlP5.*;
 import de.fhpotsdam.unfolding.*;
 import de.fhpotsdam.unfolding.geo.*;
 import de.fhpotsdam.unfolding.utils.*;
-import java.util.List;
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 import de.fhpotsdam.unfolding.providers.*;
 
 UnfoldingMap map;
 
-List<Location> locations1;
-List<Location> locations2;
-
-List<ClusteredMarker> clustered1;
-List<ClusteredMarker> clustered2;
-
 ControlP5 controlP5;
 MultiList l;
 
-// Zet deze waarden van 1-3 om verschillende typen maps te krijgen
-int mapMethod = 2;
-
-// Zet deze waarden van 1-3 om verschillende kleurensets te gebruiken
-int visColors = 3;
-
-// Zet deze waarde op true om clustering toe te passen
-Boolean applyClustering = false;
-
-// Alpha waarde, zet op 0 voor onzichtbaar, 255 voor totaal niet transparant
-int alpha = 200;
-
 int time = 0;
 
+JSONObject json;
+int indexnummer = 0;
+DataProvider provider = new DataProvider();
+
+Random rand = new Random();
+
+int minJaar = 0;
+int minMaand = 0;
+int maxJaar = 0;
+int maxMaand = 0;
+
+List<SubCategory> currentSet;
+
+java.io.FilenameFilter jsonFilter = new java.io.FilenameFilter() {
+    boolean accept(File dir, String name) {
+      return name.toLowerCase().endsWith(".json");
+    }
+  };
+
 public void setup() {
-  size(1024, 768, P2D);
+  size(1024, 500, P2D);
   noStroke();
   
-  locations1 = new ArrayList<Location>();
-  locations2 = new ArrayList<Location>();
-
-  setVisMap();
-  fillRandomData();
-
-  map.zoomAndPanTo(locations2.get(0), 13);
+  map = new UnfoldingMap(this, 0, 0, width, height - 25, new Microsoft.HybridProvider());
+  map.setTweening(false);
+  MapUtils.createDefaultEventDispatcher(this, map);
   
-  if (applyClustering)
-  {
-    clustered1 = ClusterLocations(locations1);
-    clustered2 = ClusterLocations(locations2);
+  // we'll have a look in the data folder
+  java.io.File folder = new java.io.File(dataPath(""));
+   
+  // list the files in the data folder, passing the filter as parameter
+  String[] filenames = folder.list(jsonFilter);
+  println(filenames.length + " json files in specified directory");
+   
+  // display and parse the filenames
+  for (int i = 0; i < filenames.length; i++) {
+    println(filenames[i]);
+    parseJSONFile(filenames[i]);
   }
   
+  // De provider is nu gevuld, dus kunnen we deze gebruiken in de draw
+  // We moeten nu de minimale en de maximale jaar/maand combinatie gaan bepalen
+  minJaar = provider.getMinJaar();
+  minMaand = provider.getMinMaand(minJaar);
+  maxJaar = provider.getMaxJaar();
+  maxMaand = provider.getMaxMaand(maxJaar);
+  
+  println("minJaar : " + minJaar);
+  println("minMaand: " + minMaand);
+  
+  println("maxJaar : " + maxJaar);
+  println("maxMaand: " + maxMaand);
+  
+  currentSet = provider.getDataForMoment(minJaar, minMaand);
   
   //GUI control
   controlP5 = new ControlP5(this);
   
   l = controlP5.addMultiList("dataList",40,40,200,24);
   
-  MultiListButton b;
-  MultiListButton c;
+  // De multicontrol opbouwen op basis van de datasets/categorieen/subcategorieeen
   
-  b = l.add("Misdaad",1);
+  for (DataSet set: provider.datasets)
+  {
+    MultiListButton btn;
+    btn = l.add(set.naam, set.id);
+    for (Category cat: set.categories)
+    {
+      MultiListButton btncat;
+      btncat = btn.add(cat.naam, cat.id);
+      for (SubCategory scat: cat.subcategories)
+      {
+        MultiListButton btnscat;
+        btnscat = btncat.add(scat.naam, scat.id);
+      }
+    }
+  }
   
-  c = b.add("Diefstal",11);
-  c.add("Fietsen",111);
-  c = b.add("Drugs",12);
-  c.add("Heroine",121);
+  // Calculeer het aantal maanden in het bereik
+  // 2010 2
+  //  2011 1
+  // (maxJaar - minJaar * 12) - (minMaand - maxMaand)
+  // minMaand - maxMaand 
   
-  b = l.add("Verkeer",2);
-  
-  b.add("Ongelukken",21);
-  b.add("Overtredingen",22);
+  int months = 0;
+  if (minJaar == maxJaar)
+  {
+    months = maxMaand - minMaand;
+  }
+  else
+  {
+    months = (maxJaar - minJaar * 12) - (minMaand - maxMaand);
+  }
   
   //time slider
   controlP5.addSlider("time")
-     .setPosition(112,740)
-     .setWidth(800)
-     .setRange(2011.0000,2014.9999) // values can range from big to small as well
-     .setValue(128)
-     .setNumberOfTickMarks(80)
+     .setPosition(100,height - 20)
+     .setWidth(width - 200)
+     .setRange(minJaar + (minMaand / 100), maxJaar + (maxMaand / 100)) // values can range from big to small as well
+     .setValue(minJaar + (minMaand / 100))
+     .setNumberOfTickMarks(2 + months)
      .setSliderMode(Slider.FLEXIBLE)
      .setLabel("Tijd")
      ;
@@ -88,228 +126,137 @@ public void controlEvent(ControlEvent theEvent) {
   // theEvent.controller().remove();
 }
 
-public List<ClusteredMarker> ClusterLocations(List<Location> source)
+public void drawLegend()
 {
-  // Loop door beide sets en maak er geclusterde data van
-  // Pak het eerste punt en kijk of er genoeg 'buren' zijn binnen de radius
-  // Zo ja, maak van dit punt een cluster punt en voeg het punt binnen de radius toe
-  // verwijder beide punten uit de bron lijst. 
-  // bepaal het nieuwe middelpunt
-  // kijk opnieuw of er punten in de bronlijst binnen de radius passen
-  // de radius groeit per punt wat toegevoegd wordt met growSize
+  // Teken in de rechterbovenhoek de legenda
+  noStroke();
+  fill(0, 10, 50, 220);
+  rect(width - 150, 10, 140, 200);
+    
+  PFont myFont = new BitFont(CP.decodeBase64(BitFont.standard56base64));
+  textFont(myFont);
   
-  // Maak de resultaat lijst
-  List<ClusteredMarker> clustered = new ArrayList<ClusteredMarker>();
-  
-  float radius = 0.03f; // Speel met deze waarde om de 'reikwijdte' van de clustering aan te passen
-  
-  float growSize = 0.008f;
-  Boolean stopClustering = false;
-  ClusteredMarker currentCluster = null;
-  
-  while (!stopClustering)
+  fill(255, 255, 255, 255);
+  int yOffset = 20;
+  for (SubCategory scat: currentSet)
   {
-    if (currentCluster == null)
-    {
-      if (source.size() > 0)
-      {
-        // Zet de nieuwe cluster op dit punt
-        currentCluster = new ClusteredMarker(source.get(0), growSize);
-        
-        // Verwijder het punt uit de bron
-        source.remove(0);
-      }
-      else
-      {
-        stopClustering = true;
-      }
-
-      // Lus door alle items in de source      
-      for (int index = source.size()-1; index >= 0; index--)
-      {
-         Location loc = source.get(index);
-         // Bepaal of de plaats van dit item binnen de radius van de huidige cluster ligt
-         double distance = Math.sqrt((currentCluster.getLoc().getLat() - loc.getLat()) * (currentCluster.getLoc().getLat() - loc.getLat()) + (currentCluster.getLoc().getLon() - loc.getLon()) * (currentCluster.getLoc().getLon() - loc.getLon()));
-         
-         distance = Math.abs(distance);
-         
-         //if (distance <= currentCluster.size)
-         if (distance <= radius)
-         {
-           // Valt binnen onze radius, dus opnemen in deze cluster en verwijderen uit lijst
-           // Bepaal nieuw locatie van de cluster als gemiddelde van dit punt en het huidige punt
-           currentCluster.getLoc().setLat(currentCluster.getLoc().getLat() + ((loc.getLat() - currentCluster.getLoc().getLat())/2));
-           currentCluster.getLoc().setLon(currentCluster.getLoc().getLon() + ((loc.getLon() - currentCluster.getLoc().getLon())/2));
-           
-           source.remove(index);
-           currentCluster.grow(growSize);
-         } 
-      } 
-      
-      // Add het cluster aan de lijst
-      if (currentCluster != null)
-      {
-        clustered.add(currentCluster);
-        currentCluster = null;
-      }
-
-      if (source.size() == 0)
-      {
-        stopClustering = true;
-      }
-    }
+    text(scat.naam.toUpperCase(), width - 145, yOffset);
+    
+    // Kleurvoorbeeld
+    fill(scat.red, scat.green, scat.blue, 200);
+    rect(width - 30, yOffset - 5, 10, 10);
+    
+    yOffset+=10;
   }
-  
-  return clustered;
-}
-
-public void fillRandomData()
-{
-  for (int i = 0; i<2000; i++)
-  {
-      Random rand = new Random();
-      float xdev = rand.nextInt(500) - 250;
-      float ydev = rand.nextInt(1000) - 500;
-      
-      Location pseudoplek = new Location(51.9433333f + (xdev / 10000), 4.4425f + (ydev / 10000));
-      locations1.add(pseudoplek);
-  }
-  
-  for (int i = 0; i<600; i++)
-  {
-      Random rand = new Random();
-      float xdev = rand.nextInt(500) - 250;
-      float ydev = rand.nextInt(1000) - 500;
-      
-      Location pseudoplek = new Location(51.9433333f + (xdev / 10000), 4.4425f + (ydev / 10000));
-      locations2.add(pseudoplek);
-  }  
-}
-
-public void setVisMap()
-{
-  switch (mapMethod)
-  {
-    case 1:
-      map = new UnfoldingMap(this, new OpenStreetMap.OSMGrayProvider());
-      map.setTweening(false);
-      MapUtils.createDefaultEventDispatcher(this, map);
-      break;
-    case 2:
-      map = new UnfoldingMap(this, 0, 0, 1024, 720, new Microsoft.HybridProvider());
-      map.setTweening(false);
-      MapUtils.createDefaultEventDispatcher(this, map);
-      break;      
-    case 3:
-      map = new UnfoldingMap(this, new StamenMapProvider.TonerLite());
-      map.setTweening(false);
-      MapUtils.createDefaultEventDispatcher(this, map);
-      break;   
-    }
 }
 
 public void draw() {
   background(time);
   map.draw();
-
-  if (applyClustering)
-  {
-    // Teken de clusters en niet de locations
-    for (ClusteredMarker cluster: clustered1)
-    {
-      ScreenPosition position = map.getScreenPosition(cluster.getLoc());
-      if (visColors==1)
-      {      
-        fill(0, 200, 0, alpha);
-      }
-      if (visColors==2)
-      {      
-        fill(0, 200, 0, alpha);
-      }
-      if (visColors==3)
-      {      
-        fill(200, 0, 0, alpha);
-      }
-      
-      float s = map.getZoom() / 1000;
-      ellipse(position.x, position.y, 5 + (cluster.getSize() * s), 5 + (cluster.getSize() * s));
-    }
-    
-    for (ClusteredMarker cluster: clustered2)
-    {
-      ScreenPosition position = map.getScreenPosition(cluster.getLoc());
-
-      if (visColors==1)
-      {      
-        fill(200, 0, 0, alpha);
-      }
-      if (visColors==2)
-      {      
-        fill(0, 0, 200, alpha);
-      }
-      if (visColors==3)
-      {      
-        fill(200, 100, 0, alpha);
-      }
-      
-      float s = map.getZoom() / 1000;
-      ellipse(position.x, position.y, 5 + (cluster.getSize() * s), 5 + (cluster.getSize() * s));
-    }
-  }
-  else
-  {
-    // Draws locations on screen positions according to their geo-locations.
-    for (Location loc: locations1)
-    {
-      ScreenPosition posBerlin = map.getScreenPosition(loc);
-      if (visColors==1)
-      {      
-        fill(0, 200, 0, alpha);
-      }
-      if (visColors==2)
-      {      
-        fill(0, 200, 0, alpha);
-      }
-      if (visColors==3)
-      {      
-        fill(200, 0, 0, alpha);
-      }
-      float s = map.getZoom();
-      //ellipse(posBerlin.x, posBerlin.y, s / 1000, s / 1000);
-      ellipse(posBerlin.x, posBerlin.y, 10, 10);
-    }
-    
-    for (Location loc: locations2)
-    {
-      ScreenPosition posBerlin = map.getScreenPosition(loc);
-      if (visColors==1)
-      {      
-        fill(200, 0, 0, alpha);
-      }
-      if (visColors==2)
-      {      
-        fill(0, 0, 200, alpha);
-      }
-      if (visColors==3)
-      {      
-        fill(200, 100, 0, alpha);
-      }
-      ellipse(posBerlin.x, posBerlin.y, 10, 10);
-    }
-  }
-
-
-
   
-  // Fixed-size marker
-  //ScreenPosition posBerlin = map.getScreenPosition(locationBerlin);
-  //fill(0, 200, 0, 100);
-  //ellipse(posBerlin.x, posBerlin.y, 20, 20);
+  // Alleen bij tijdsverandering of bij wisselen selected?
+  currentSet = provider.getDataForMoment(minJaar, minMaand);
+  
+  drawLegend();
+  
+  // Elke drawcycle halen we de tekenen locaties op
+  for (SubCategory scat: currentSet)
+  {
+    // Zet de fill color
+    fill(scat.red, scat.green, scat.blue, 255);
+      
+    for (Period per: scat.periods)
+    {
+      for (DataPoint loc: per.locations)
+      {
+        ScreenPosition position = map.getScreenPosition(new Location(loc.lat, loc.lng));
+        
+        // Afhankelijk van het datatype tekenen we een vaste grote of een calculatie
+        if (scat.datatype == 0)
+        {
+          ellipse(position.x, position.y, 10, 10);
+        }
+        if (scat.datatype == 1)
+        {
+          float s = map.getZoom() / 100; // TODO WEIGTH * AMOUNT
+          ellipse(position.x, position.y, s, s);
+        }
+      }
+    }
+  }
+}
 
-  // Zoom dependent marker size
-  //ScreenPosition posLondon = map.getScreenPosition(locationLondon);
-  //fill(200, 0, 0, 100);
-  //float s = map.getZoom();
-  //ellipse(posLondon.x, posLondon.y, s, s);
+void parseJSONFile(String file)
+{
+  json = loadJSONObject(file);
+
+  String hoofdnaam = json.getString("naam");
+  JSONArray categories = json.getJSONArray("categories");
+  println(hoofdnaam);
+  
+  DataSet dataset = new DataSet(indexnummer, hoofdnaam);
+  indexnummer++;
+  
+  for (int hcat=0; hcat<categories.size(); hcat++)
+  {
+    JSONObject hcategorie = categories.getJSONObject(hcat);
+    String naam = hcategorie.getString("naam");
+    JSONArray subcategories = hcategorie.getJSONArray("subcategories");
+    println(" +   " + naam);
+    
+    Category category = new Category(indexnummer, naam);
+    indexnummer++;
+    
+    for (int cat=0; cat<subcategories.size(); cat++)
+    {
+      JSONObject categorie = subcategories.getJSONObject(cat);
+      String catnaam = categorie.getString("naam");
+      int datatype = categorie.getInt("datatype");
+      float weight = categorie.getFloat("weight");
+      int r = 100 + rand.nextInt(155);
+      int g = 100 + rand.nextInt(155); 
+      int b = 100 + rand.nextInt(155);
+      println("     +   " + catnaam);
+      
+      SubCategory subcategory = new SubCategory(indexnummer, catnaam, datatype, weight, r, g ,b);
+      indexnummer++;
+      
+      JSONArray periods = categorie.getJSONArray("periods");
+      for (int per=0; per<periods.size(); per++)
+      {
+        JSONObject jperiod = periods.getJSONObject(per);
+        int year = jperiod.getInt("jaar");
+        int month = jperiod.getInt("maand");
+        println("         +   " + year + ", " + month);
+        
+        Period period = new Period(year, month);
+        
+        JSONArray locations = jperiod.getJSONArray("locations");
+        for (int loc=0; loc<locations.size(); loc++)
+        {
+          JSONObject jlocation = locations.getJSONObject(loc);
+          float lat = jlocation.getFloat("lat");
+          float lng = jlocation.getFloat("lng");
+          float amount = jlocation.getFloat("amount");
+          println("             +   " + lat + ", " + lng + ", " + amount);
+          
+          DataPoint location = new DataPoint(lat, lng, amount);
+          period.addLocation(location);
+        }
+        
+        // In de lijst
+        subcategory.addPeriod(period);
+      }
+      
+      // Toevoegen aan de lijst
+      category.addSubCategory(subcategory);
+    }
+    
+    // Add de category
+    dataset.addCategory(category);
+  }
+  
+  // Add de dataset
+  provider.addDataSet(dataset);
 }
 
