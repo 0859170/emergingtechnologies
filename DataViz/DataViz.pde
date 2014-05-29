@@ -1,3 +1,4 @@
+import controlP5.*;
 import de.fhpotsdam.unfolding.*;
 import de.fhpotsdam.unfolding.geo.*;
 import de.fhpotsdam.unfolding.utils.*;
@@ -13,6 +14,9 @@ List<Location> locations2;
 List<ClusteredMarker> clustered1;
 List<ClusteredMarker> clustered2;
 
+ControlP5 controlP5;
+MultiList l;
+
 // Zet deze waarden van 1-3 om verschillende typen maps te krijgen
 int mapMethod = 2;
 
@@ -24,6 +28,8 @@ Boolean applyClustering = false;
 
 // Alpha waarde, zet op 0 voor onzichtbaar, 255 voor totaal niet transparant
 int alpha = 200;
+
+int time = 0;
 
 public void setup() {
   size(1024, 768, P2D);
@@ -42,6 +48,44 @@ public void setup() {
     clustered1 = ClusterLocations(locations1);
     clustered2 = ClusterLocations(locations2);
   }
+  
+  
+  //GUI control
+  controlP5 = new ControlP5(this);
+  
+  l = controlP5.addMultiList("dataList",40,40,200,24);
+  
+  MultiListButton b;
+  MultiListButton c;
+  
+  b = l.add("Misdaad",1);
+  
+  c = b.add("Diefstal",11);
+  c.add("Fietsen",111);
+  c = b.add("Drugs",12);
+  c.add("Heroine",121);
+  
+  b = l.add("Verkeer",2);
+  
+  b.add("Ongelukken",21);
+  b.add("Overtredingen",22);
+  
+  //time slider
+  controlP5.addSlider("time")
+     .setPosition(112,740)
+     .setWidth(800)
+     .setRange(255,0) // values can range from big to small as well
+     .setValue(128)
+     .setNumberOfTickMarks(80)
+     .setSliderMode(Slider.FLEXIBLE)
+     .setLabel("Tijd")
+     ;
+}
+
+public void controlEvent(ControlEvent theEvent) {
+  println(theEvent.value());  
+  // uncomment the line below to remove a multilist item when clicked.
+  // theEvent.controller().remove();
 }
 
 public List<ClusteredMarker> ClusterLocations(List<Location> source)
@@ -152,7 +196,7 @@ public void setVisMap()
       MapUtils.createDefaultEventDispatcher(this, map);
       break;
     case 2:
-      map = new UnfoldingMap(this, new Microsoft.HybridProvider());
+      map = new UnfoldingMap(this, 0, 0, 1024, 720, new Microsoft.HybridProvider());
       map.setTweening(false);
       MapUtils.createDefaultEventDispatcher(this, map);
       break;      
@@ -165,7 +209,7 @@ public void setVisMap()
 }
 
 public void draw() {
-  background(0);
+  background(time);
   map.draw();
 
   if (applyClustering)
