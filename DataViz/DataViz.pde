@@ -127,7 +127,6 @@ public void setup() {
      .setRange(float(minJaar) + (float(minMaand) / 100), float(maxJaar) + (float(maxMaand) / 100)) // values can range from big to small as well
      .setValue(float(minJaar) + (float(minMaand) / 100))
      .setNumberOfTickMarks(1 + months)
-     //.setNumberOfTickMarks(80)
      .setSliderMode(Slider.FLEXIBLE)
      .setLabel("Tijd")
      ;
@@ -139,6 +138,14 @@ public void setup() {
      .setImages(imgs)
      .updateSize()
      ;
+     
+  PImage[] imgs2 = {loadImage("pauze_a.png"),loadImage("pauze_b.png"),loadImage("pauze_c.png")};
+  controlP5.addButton("pauze")
+     .setValue(1)
+     .setPosition(40,height - 20)
+     .setImages(imgs2)
+     .updateSize()
+     ;
   
   // Wordt automatisch aangezet?   
   isPlaying = false;
@@ -146,6 +153,17 @@ public void setup() {
 
 public void controlEvent(ControlEvent theEvent) {
   println(theEvent.value());  
+  
+  // Als iemand een andere maand selecteert in de slider dan moeten we terugrekenen naar jaar / maand
+  // het integer component is het jaar
+  int currentJaar = int(theEvent.value());
+  int currentMaand = int((theEvent.value() - currentJaar) * 100);
+  println(currentJaar);
+  println(currentMaand);
+  
+  currentSet = provider.getDataForMoment(currentJaar, currentMaand);
+    
+    
   // uncomment the line below to remove a multilist item when clicked.
   // theEvent.controller().remove();
 }
@@ -153,6 +171,11 @@ public void controlEvent(ControlEvent theEvent) {
 public void play(int theValue) {
   println("playbutton aangeroepen: "+theValue);
   isPlaying = true;
+}
+
+public void pauze(int theValue) {
+  println("pauzebutton aangeroepen: "+theValue);
+  isPlaying = false;
 }
 
 public void drawLegend()
@@ -225,8 +248,6 @@ public void draw() {
     println("calced " + newval);
     // We zetten de slider op de huidige jaar/maand combo
     controlP5.getController("time").setValue(newval);
-    // Alleen bij tijdsverandering of bij wisselen selected?
-    currentSet = provider.getDataForMoment(currentJaar, currentMaand);
   }
   
   drawLegend();
