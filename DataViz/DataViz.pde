@@ -213,7 +213,7 @@ public void drawLegend()
   // Teken in de rechterbovenhoek de legenda
   noStroke();
   fill(0, 10, 50, 220);
-  rect(width - 150, 10, 140, 200);
+  rect(width - 150, 10, 140, height - 100);
     
   PFont myFont = new BitFont(CP.decodeBase64(BitFont.standard56base64));
   textFont(myFont);
