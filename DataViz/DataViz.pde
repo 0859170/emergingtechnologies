@@ -28,7 +28,7 @@ int maxMaand = 0;
 int currentJaar = 0;
 int currentMaand = 0;
 
-int intervalInMilliseconds = 1000;
+int intervalInMilliseconds = 3000; // 3 seconden
 
 boolean isPlaying = false;
 
@@ -45,7 +45,7 @@ java.io.FilenameFilter jsonFilter = new java.io.FilenameFilter() {
   };
 
 public void setup() {
-  size(1024, 768, P2D);
+  size(1024, 500, P2D);
   noStroke();
   
   map = new UnfoldingMap(this, 0, 0, width, height - 25, new Microsoft.HybridProvider());
@@ -165,6 +165,7 @@ public void controlEvent(ControlEvent theEvent) {
     println(currentJaar);
     println(currentMaand);
     
+    clearCurrentSet();
     currentSet = provider.getDataForMoment(currentJaar, currentMaand);
   }
   else
@@ -176,11 +177,25 @@ public void controlEvent(ControlEvent theEvent) {
       if ((millis() - toggleDebounceLatest) > toggleDebounceMilliseconds)
       {
         provider.toggleDataSetSelected(int(theEvent.value()));
+        
+        // verbreek de koppeling
+        
+        clearCurrentSet();
         currentSet = provider.getDataForMoment(currentJaar, currentMaand);
         toggleDebounceLatest = millis();
       }
     }
   }
+}
+
+public void clearCurrentSet()
+{
+  for (SubCategory cat: currentSet)
+  {
+    cat.periods = null;
+  }
+  
+  currentSet = null;
 }
 
 public void play(int theValue) {
@@ -284,6 +299,7 @@ public void draw() {
         {
           ellipse(position.x, position.y, 10, 10);
         }
+        
         if (scat.datatype == 1)
         {
           float s = map.getZoom() / 100; // TODO WEIGTH * AMOUNT

@@ -194,6 +194,7 @@ public class DataProvider  {
 
 	public List<SubCategory> getDataForMoment(int year, int month)
 	{
+                System.out.println("Free Memory before getDataForMoment: " + Runtime.getRuntime().freeMemory()); 
 		// Itereer door alle subsets heen en retourneer de dichtsbijzijnde selected subcat periods
 		List<SubCategory> result = new ArrayList<SubCategory>();
 		
