@@ -8,12 +8,12 @@ public class GeoCoder {
 	
 	private ArrayList<Location> locations;
 
-	public GeoCoder() {
+	public GeoCoder(String projectroot) {
 		this.locations = new ArrayList<Location>();
 		//read zipcode geolocation file
 		BufferedReader fileReader = null;
 		String line = "";
-		String fileToParse = "/Users/Mark/Documents/workspaces/HRO/INFPR201A2/postcode_NL.csv";
+		String fileToParse = projectroot+"postcode_NL.csv";
 		try {
 			fileReader = new BufferedReader(new FileReader(fileToParse));
 			while ((line = fileReader.readLine()) != null) {
