@@ -17,7 +17,7 @@ public class Convert {
 		SubCategory subcat = new SubCategory("Fietsen",0,1);
 		
 		BufferedReader fileReader = null;
-		int i;
+		int i;int a = 0;
 		String line = "";
 		String fileToParse = "/Users/Mark/Documents/workspaces/HRO/INFPR201A2/fietsendiefstal.csv";
 		boolean initial = true;
@@ -80,10 +80,12 @@ public class Convert {
 				}
 				
 				Location loc = geo.GeoCodeAddress(straat, plaats);
-				
 				if (loc.straatnaam != null) {
 					subcat.addLocation(beginJaar,beginMaand,new DataPoint(loc.lat,loc.lng,1));
 				}
+				
+				//a++;
+				//if (a == 200) { break; }
 			}
 
 		} catch (IOException e) {
@@ -91,6 +93,7 @@ public class Convert {
 		}
 		cat.addSubCategory(subcat);
 		data.addCategory(cat);
+		
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try {

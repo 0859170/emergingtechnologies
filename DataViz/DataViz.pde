@@ -28,7 +28,7 @@ int maxMaand = 0;
 int currentJaar = 0;
 int currentMaand = 0;
 
-int intervalInMilliseconds = 3000; // 3 seconden
+int intervalInMilliseconds = 1000; // 3 seconden
 
 boolean isPlaying = false;
 

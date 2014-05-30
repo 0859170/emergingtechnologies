@@ -59,7 +59,9 @@ public class GeoCoder {
 	}
 	
 	public Location GeoCodeAddress(String straatnaam, String plaats) {
+		
 		for(Location loc : this.locations) {
+			//System.out.println(loc.straatnaam+" == "+straatnaam);
 			if (loc.straatnaam.equals(straatnaam) && loc.plaats.equals(plaats)) {
 				return loc;
 			}
