@@ -1,2 +1,4 @@
 /postcode_NL.csv
-/.metadata
+.metadata
+Convert/src/convertData/postcode_NL.csv
+Convert/bin
