@@ -121,11 +121,7 @@ java.io.FilenameFilter jsonFilter = new java.io.FilenameFilter() {
 Deze methode initialiseert de data en de interface
 ****************************************************************************************************************************/
 public void setup() {
-<<<<<<< HEAD
   size(1024, 768, P2D);
-=======
-  size(1024, 700, P2D);
->>>>>>> 107658a5293bcaabf71d1ba65c8f82620c13f298
   noStroke();
   
   /* Heatmap code */
