@@ -1,8 +1,0 @@
-<?php
-class FietsendiefstalConvert {
-	
-	public function __construct($data) {
-		echo "test";
-	}
-}
-?>

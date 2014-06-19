@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;/Converter/data/data.csv&apos; to &apos;fietsendiefstal.csv&apos;&#x0A;- Original element: &apos;data.csv&apos;" description="Rename resource &apos;data.csv&apos;" flags="7" id="org.eclipse.dltk.ui.rename.resource" input="data/data.csv" name="fietsendiefstal.csv" stamp="1401365905617" version="1.0"/>
-</session>
