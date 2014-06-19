@@ -45,7 +45,7 @@ java.io.FilenameFilter jsonFilter = new java.io.FilenameFilter() {
   };
 
 public void setup() {
-  size(1024, 500, P2D);
+  size(1024, 700, P2D);
   noStroke();
   
   map = new UnfoldingMap(this, 0, 0, width, height - 25, new Microsoft.HybridProvider());

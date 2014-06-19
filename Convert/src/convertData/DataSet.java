@@ -16,4 +16,15 @@ public class DataSet  {
 	{
 		this.categories.add(cat);
 	}
+	
+	public Category getCategory(String naam){
+		for (Category cat : categories) {
+			if ( cat.naam.equals(naam) ){
+				return cat;
+			}
+		}
+		Category returnCat = new Category(naam);
+		categories.add(returnCat);
+		return returnCat;
+	}
 }
