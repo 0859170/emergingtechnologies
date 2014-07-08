@@ -50,10 +50,10 @@ public class LisaConvert {
 	        	continue;
 	        }
 	        cat = data.getCategory(catagoryName + tokens[2].substring(0, 2));
-	        SubCategory subCat = cat.getSubCategory(sbiCode.getSBIName(tokens[2]), 1, 0.5f);
+	        SubCategory subCat = cat.getSubCategory(sbiCode.getSBIName(tokens[2]), 1, 0.05f);
 	        //System.out.println("printing in cat"+ sbiCode.getSBIName(tokens[2]) + ":" + tokens[0] + loc.lat +","+ loc.lng);
 	        int weight = Integer.parseInt(tokens[6].replace(".", ""));
-	        weight = (int)(weight/Math.sqrt(weight));
+	        weight = (int)(1+(Math.sqrt(weight)*0.1f));
 	        subCat.addLocation(Integer.parseInt(tokens[0]), 0, new DataPoint(loc.lat,loc.lng,weight));
 	        teller++;
 	        
@@ -69,9 +69,10 @@ public class LisaConvert {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			File outFile = new File("lisa.json"); 
+			File outFile = new File("..\\DataViz\\data\\lisa.json"); 
 			System.out.println("Writing to: " + outFile.getAbsolutePath());
-			mapper.writeValue(new File("lisa.json"), data);
+			//mapper.writeValue(new File("lisa.json"), data);
+			mapper.writeValue(outFile, data);
 			System.out.println("Done Writing!");
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
