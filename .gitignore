@@ -2,3 +2,4 @@
 .metadata
 Convert/src/convertData/postcode_NL.csv
 Convert/bin
+.metadata/*

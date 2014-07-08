@@ -50,9 +50,11 @@ public class LisaConvert {
 	        	continue;
 	        }
 	        cat = data.getCategory(catagoryName + tokens[2].substring(0, 2));
-	        SubCategory subCat = cat.getSubCategory(sbiCode.getSBIName(tokens[2]), 1, 0.05f);
+	        SubCategory subCat = cat.getSubCategory(sbiCode.getSBIName(tokens[2]), 1, 0.5f);
 	        //System.out.println("printing in cat"+ sbiCode.getSBIName(tokens[2]) + ":" + tokens[0] + loc.lat +","+ loc.lng);
-	        subCat.addLocation(Integer.parseInt(tokens[0]), 0, new DataPoint(loc.lat,loc.lng,Integer.parseInt(tokens[6].replace(".", ""))));
+	        int weight = Integer.parseInt(tokens[6].replace(".", ""));
+	        weight = (int)(weight/Math.sqrt(weight));
+	        subCat.addLocation(Integer.parseInt(tokens[0]), 0, new DataPoint(loc.lat,loc.lng,weight));
 	        teller++;
 	        
 	    }
