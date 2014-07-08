@@ -416,7 +416,6 @@ public void draw() {
         /* Afhankelijk van het datatype tekenen we een vaste grote of een calculatie */
         if (scat.datatype == 0)
         {
-          // ellipse(position.x, position.y, 10, 10); 
           if (needRecalc) {
             createHeatmapPoint(position.x, position.y);
           }
@@ -427,6 +426,11 @@ public void draw() {
           /* TODO: WEIGHT * amount factor calculatie */
           float s = (map.getZoom() / 100) * (scat.weight * loc.amount); 
           ellipse(position.x, position.y, s, s);
+        }
+        
+        if (scat.datatype == 2)
+        {
+          ellipse(position.x, position.y, 10, 10); 
         }
       }
     }
@@ -487,7 +491,7 @@ void parseJSONFile(String file)
       int b = 100 + rand.nextInt(155);
       println("     +   " + catnaam);
 
-      SubCategory subcategory = new SubCategory(indexnummer, catnaam, datatype, weight, r, g, b);
+      SubCategory subcategory = new SubCategory(indexnummer, catnaam, datatype, weight, r, g, b, false);
       indexnummer++;
 
       JSONArray periods = categorie.getJSONArray("periods");

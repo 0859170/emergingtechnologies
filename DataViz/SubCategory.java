@@ -31,13 +31,13 @@ public class SubCategory {
   public List<Period> periods;
 
   /* Constructor */
-  public SubCategory(int id, String naam, int datatype, float weight, int red, int green, int blue)
+  public SubCategory(int id, String naam, int datatype, float weight, int red, int green, int blue, boolean selected)
   {
     this.id = id;
     this.naam = naam;
     this.datatype = datatype;
     this.weight = weight;
-    this.selected = true;
+    this.selected = selected;
     this.red = red;
     this.green = green;
     this.blue = blue;

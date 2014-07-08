@@ -92,17 +92,13 @@ public class DataProvider {
       {
         for (SubCategory scat: cat.subcategories)
         {
-          // Als deze subcat selected is nemen we hem sowieso mee
-          if (scat.selected)
-          {
-            SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue);
+          SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue, false);
 
-            for (Period per: scat.periods)
+          for (Period per: scat.periods)
+          {
+            if (per.year > jaar)
             {
-              if (per.year > jaar)
-              {
-                jaar = per.year;
-              }
+              jaar = per.year;
             }
           }
         }
@@ -124,17 +120,13 @@ public class DataProvider {
       {
         for (SubCategory scat: cat.subcategories)
         {
-          // Als deze subcat selected is nemen we hem sowieso mee
-          if (scat.selected)
-          {
-            SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue);
+          SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue, false);
 
-            for (Period per: scat.periods)
+          for (Period per: scat.periods)
+          {
+            if (per.year < jaar)
             {
-              if (per.year < jaar)
-              {
-                jaar = per.year;
-              }
+              jaar = per.year;
             }
           }
         }
@@ -156,19 +148,15 @@ public class DataProvider {
       {
         for (SubCategory scat: cat.subcategories)
         {
-          // Als deze subcat selected is nemen we hem sowieso mee
-          if (scat.selected)
-          {
-            SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue);
+          SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue, false);
 
-            for (Period per: scat.periods)
+          for (Period per: scat.periods)
+          {
+            if (per.year == jaar)
             {
-              if (per.year == jaar)
+              if (per.month > maand)
               {
-                if (per.month > maand)
-                {
-                  maand = per.month;
-                }
+                maand = per.month;
               }
             }
           }
@@ -191,19 +179,15 @@ public class DataProvider {
       {
         for (SubCategory scat: cat.subcategories)
         {
-          // Als deze subcat selected is nemen we hem sowieso mee
-          if (scat.selected)
-          {
-            SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue);
+          SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue, false);
 
-            for (Period per: scat.periods)
+          for (Period per: scat.periods)
+          {
+            if (per.year == jaar)
             {
-              if (per.year == jaar)
+              if (per.month < maand)
               {
-                if (per.month < maand)
-                {
-                  maand = per.month;
-                }
+                maand = per.month;
               }
             }
           }
@@ -231,7 +215,7 @@ public class DataProvider {
           // Als deze subcat selected is nemen we hem sowieso mee
           if (scat.selected)
           {
-            SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue);
+            SubCategory subcat = new SubCategory(scat.id, scat.naam, scat.datatype, scat.weight, scat.red, scat.green, scat.blue, false);
 
             // Oke, nu bekijken welke period het beste past bij de gevraagde jaar/maand
             Period thePeriod = scat.periods.get(0); // De eerste altijd gelijk zetten
