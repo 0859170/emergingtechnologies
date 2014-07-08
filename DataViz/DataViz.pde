@@ -562,7 +562,7 @@ void drawToGradient(int x, int y)
   {
     for (int px = 0; px < heatmapBrush.width; px++) 
     {
-      // voor elkey pixel in de heatmapBrush:
+      // voor elke pixel in de heatmapBrush:
       // vind het corresponderende coordinaat in de gradient map:
       int hmX = startX+px;
       int hmY = startY+py;
